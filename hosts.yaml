@@ -1,0 +1,154 @@
+---
+
+
+R1:
+    hostname: 1.1.1.1
+    platform: 'ios'
+    username: alin
+    password: cisco
+    groups:
+        - cisco_group
+        - core_group
+    data:
+        protocol: bgp
+        asn: 100
+        id: iou1
+        peers:
+            - 1.1.1.5
+            - 1.1.1.6
+        epeers:
+            - 1.1.1.7
+        remote-asn: 200
+        role: client
+
+
+R2:
+    hostname: 1.1.1.2
+    platform: 'ios'
+    username: alin
+    password: cisco
+    groups:
+        - cisco_group
+        - core_group
+    data:
+        protocol: bgp
+        asn: 100
+        id: iou2
+        peers:
+            - 1.1.1.5
+            - 1.1.1.6
+        role: non-client
+
+R3:
+    hostname: 1.1.1.3
+    platform: 'ios'
+    username: alin
+    password: cisco
+    groups:
+        - cisco_group
+        - core_group
+    data:
+        protocol: bgp
+        asn: 100
+        id: iou3
+        peers:
+            - 1.1.1.5
+            - 1.1.1.6
+        role: non-client
+
+R4:
+    hostname: 1.1.1.4
+    platform: 'ios'
+    username: alin
+    password: cisco
+    groups:
+        - cisco_group
+        - core_group
+    data:
+        protocol: bgp
+        asn: 100
+        id: iou4
+        peers:
+            - 1.1.1.5
+            - 1.1.1.6
+        epeers:
+            - 1.1.1.8
+        remote-asn: 300
+        role: client
+
+
+R5:
+    hostname: 1.1.1.5
+    platform: 'ios'
+    username: alin
+    password: cisco
+    groups:
+        - cisco_group
+        - core_group
+    data:
+        protocol: bgp
+        asn: 100
+        id: iou5
+        peers:
+            - 1.1.1.1
+            - 1.1.1.2
+            - 1.1.1.3
+            - 1.1.1.4
+            - 1.1.1.6
+        role: RR
+
+R6:
+    hostname: 1.1.1.6
+    platform: 'ios'
+    username: alin
+    password: cisco
+    groups:
+        - cisco_group
+        - core_group
+    data:
+        protocol: bgp
+        asn: 100
+        id: iou6
+        peers:
+            - 1.1.1.1
+            - 1.1.1.2
+            - 1.1.1.3
+            - 1.1.1.4
+            - 1.1.1.5
+        role: RR
+
+
+R7:
+    hostname: 1.1.1.7
+    platform: 'ios'
+    username: alin
+    password: cisco
+    groups:
+        - cisco_group
+        - Customer1
+    data:
+        protocol: bgp
+        asn: 200
+        remote-asn: 100
+        id: iou7
+        peers:
+            - 1.1.1.1
+        role: customer
+
+
+R8:
+    hostname: 1.1.1.8
+    platform: 'ios'
+    username: alin
+    password: cisco
+    groups:
+        - cisco_group
+        - Customer2
+    data:
+        protocol: bgp
+        id: iou8
+        asn: 300
+        remote-asn: 100
+        peers:
+            - 1.1.1.4
+        role: customer

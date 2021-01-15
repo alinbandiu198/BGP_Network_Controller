@@ -1,0 +1,12 @@
+---
+inventory:
+    plugin: SimpleInventory
+    options:
+        host_file: "/home/alin/Documents/Network_Automation_v2/hosts.yaml"
+        group_file: "/home/alin/Documents/Network_Automation_v2/groups.yaml"
+        defaults_file: "/home/alin/Documents/Network_Automation_v2/defaults.yaml"
+
+runner:
+  plugin: threaded
+  options:
+    num_workers: 100
