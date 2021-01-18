@@ -33,15 +33,16 @@ headers = {'Content-Type': 'application/yang-data+json', #Defining the headers
 
 
 def Automate_Interface_Description():
+    device =[]
     driver = get_network_driver('ios')
-    for x in range (1,6):
+    for x in range (1,7):
         iou = driver(Devices['R'+str(x)]['hostname'], 'alin', 'cisco')
         iou.open()
         
         lldp_neigh = iou.get_lldp_neighbors()
         for key in lldp_neigh:
             nr = key + ' R' + str(x)
-            for y in range (1,6): 
+            for y in range (1,7): 
                 if x ==y:
                     #print(key)
                     #print(lldp_neigh[key])
@@ -51,7 +52,9 @@ def Automate_Interface_Description():
                     port = lldp_neigh[key][0]['port']
                     cmds = [f'interface {key}', f'description Connecting to device {host}' + f' on remote port {port}']
                     cfg = net_connect.send_config_set(cmds)
-                    print(colored("Pushing the following config to R" +str(x) , 'yellow') + '\n' + cfg )
+                    device.append("Description added on device Router" +str(x) + ' on interface'+str(key))
+    return device 
+
 
 #Automate_Interface_Description()
 
@@ -66,7 +69,10 @@ def Underlay_Monitor():
         #threading.Timer(5.0,Underlay_Monitor).start()
         core_routers = nornir.filter(F(groups__contains="core_group"))
     #print(core_routers.inventory.hosts.keys())
+    
         results = core_routers.run(netmiko_send_command, command_string="show ip ospf neigh" ,use_textfsm=True)
+        results.raise_on_error()
+
         R = 0
         
         for key in results.keys():
@@ -99,23 +105,8 @@ def Underlay_Monitor():
                         five = 'Probabily there is an ospf mtu missmatch....'
                         err_list.append(five)
 
-
-
-
-             
-        if not err_list:
-            ospf_lst.append('All Routers are running OSPF , everything is working corectly!')
-            
-        elif not ospf_lst:
-            print(err_list)
-            
-        nornir.close_connections()
-            
-        
-
-
-    except:  
-        NornirExecutionError
+    except NornirExecutionError:
+        print('cant ping')
         #error_handling.append('Oops!  , some device failed...')
         for ip in range(1,6):
             target = '1.1.1.'+str(ip)
@@ -123,6 +114,19 @@ def Underlay_Monitor():
             if response != 0: 
                 error_handling.append('Critical!!! Device with ip  '+ target + ' does not respond')
                 error_handling.append('Device management is down , fix this issue...')       
+            
+
+
+            
+    if len(error_handling)==0 and len(err_list)==0:
+        ospf_lst.append('Routing Protocol report -> Open Shortest Path First :')
+
+
+    else:
+        print(err_list)
+            
+
+
                 
     return ospf_lst , err_list ,error_handling    
 
@@ -130,6 +134,7 @@ def Underlay_Monitor():
 #Underlay_Monitor()
 def BGP_Configuration():
     rezultat = []
+    error = []
     try:
         def config(task):
             r = task.run(task=template_file,
@@ -155,29 +160,33 @@ def BGP_Configuration():
         print_result(result)
         
         rezultat.append('BGP configartion was succesful')
-        return rezultat
+
+        
     except:  
         NornirExecutionError
-        rezultat.append('Cannot execute this , some device failed...')
+        #rezultat.append('Cannot execute this , some device failed...')
         for ip in range(1,6):
             target = '1.1.1.'+str(ip)
             response =os.system("ping -c1 "+ target+ "> /dev/null")
             if response != 0: 
-                rezultat.append('Failed '+ target)
-                rezultat.append('Fix connection to this devices and try again ')
-        return rezultat
+                error.append('Failed '+ target)
+                error.append('Fix connection to this devices and try again ')
+    
+    return rezultat ,error
 
 
 #BGP_Configuration()
 def Monitor_BGP_Peerings_Core():
     alert = []
     up_peers = []
+    no_bgp =[]
     core_routers = nornir.filter(F(id="iou1"))
     result = core_routers.run(netmiko_send_command,command_string="show bgp summ" , use_textfsm=True)
     rr_routers = nornir.filter(F(role="RR"))
     rr_result = rr_routers.run(netmiko_send_command,command_string="show ip bgp summ", use_textfsm=True)
     neigh = []
     '''
+    
     for key in rr_result.keys():
         response = rr_result[key].result
         
@@ -205,28 +214,25 @@ def Monitor_BGP_Peerings_Core():
         new = response.strip()
     
         if new == '% BGP not active':
-            print('ues')
-            no_active = 'BGP is not active'
-            alert.append(no_active)
-            alert.append('Configuring BGP now...')
-            time.sleep(5)
             
-            BGP_Configuration()
-            alert.append('BGP Configured')
-            return alert
+            no_active = 'BGP is not active'
+            no_bgp.insert(0,no_active)
+
+
+            
         else:
             for key in rr_result.keys():
                 response = rr_result[key].result
         
                 for each in response:
                     if each['router_id']=='1.1.1.5':
-                        print(each) 
+                        #print(each) 
                         neigh.append('csr5')
                     elif each['router_id']=='1.1.1.6':
-                        print(each)
+                        #print(each)
                         neigh.append('csr6')
 
-            print(neigh)
+            #print(neigh)
             if neigh.count('csr5')!=5:
                 up_peers.append(' Device with ID 5 (CSR5) is missing ' + str(5-neigh.count('csr5')) + ' neighbors')
             if neigh.count('csr6')!=5:
@@ -247,7 +253,7 @@ def Monitor_BGP_Peerings_Core():
                 if response.status_code != 200:# checking the response codes 
                     alert.append('Login request failed. Status code is {}'.format(response.status_code))
                 else:        
-                    up_peers.append('Connecting to Router'+str(ip) + '.....Status code is '+str(response.status_code) + ' OK!')
+                    up_peers.append('Rest API communication with Router'+str(ip) + ' was sucessful status code is '+str(response.status_code) + ' OK!')
 
                 bgp_data =response.json() # Storing the respinse and display it in a json data format 
          
@@ -298,10 +304,8 @@ def Monitor_BGP_Peerings_Core():
                             notif4  = 'This device has received ' + str(notif_rec) +' notifications , please investigate furhter' 
                             alert.append(notif4)
     
-    if not alert:
-        return up_peers
-    else:
-        return alert
+    
+    return up_peers,alert,no_bgp
     
 
 
@@ -309,14 +313,15 @@ def Monitor_BGP_Peerings_Core():
 #Monitor_BGP_Peerings_Core()
 
 def Monitor_eBGP():
-    info = []
+    peers = []
     alert = []
+
     print('#######Checking the status of eBGP peers in Core network......########')
     print('#######eBGP routers in AS100 are Router Iou1 and Router Iou4:#########')
     print('*******If eBGP peers are down an alert message should pop up .....******')
     status = 'IOU1 Core Router eBGP edge report: '
-    alert.append(status)
-    info.append(status)
+    
+    peers.append(status)
     iou1 = nornir.filter(id= "iou1")
     results = iou1.run(netmiko_send_command, command_string="show ip bgp summary" , use_textfsm=True)
     for key in results.keys():
@@ -328,6 +333,7 @@ def Monitor_eBGP():
                     
                     alerta = 'ALERT!'+ ' eBGP session have problems the state is ' + response[info]['state_pfxrcd']
                     alert.append(alerta)
+                    '''
                     def Fixing_EBGP():
                         print('Trying to resolve the eBGP peering issue ...')
                         if response[info]['state_pfxrcd'] == "Idle": 
@@ -353,14 +359,15 @@ def Monitor_eBGP():
                         Fixing_EBGP()
                     else: 
                         print('Ok , go to CLI then')
-
+                    '''
                                         
 
 
                 else:
-                    ok = 'The eBGP session with Customer 1 is up and healthy!'
-                    info.append(ok)
+                    peers.append('The eBGP session with our Customer(1) is UP')  
     print(colored('Checking IOU4 eBGP Router...','yellow'))
+
+    
     iou4 = nornir.filter(id= "iou4")
     
     results = iou4.run(netmiko_send_command, command_string="show ip bgp summary" , use_textfsm=True)
@@ -371,20 +378,20 @@ def Monitor_eBGP():
                 print('checking the eBGP peering...')
                 if response[info]['state_pfxrcd'] != '0':
                     
-                    print(colored('ALERT!','red')+ ' eBGP session have problems the state is ' + response[info]['state_pfxrcd'])
+                    alert.append('ALERT!'+ ' eBGP session have problems the state is ' + response[info]['state_pfxrcd'])
                 else:
-                    print('The eBGP session with Customer 2 is up and healthy!')
+                    peers.append('The eBGP session with our Customer(2) is UP')
 
     for rtr in range(7,9):
         url_CSR = "https://"+ str(Devices['R'+str(rtr)]['hostname'])+":443/restconf/data/Cisco-IOS-XE-bgp-oper:bgp-state-data/neighbors/neighbor" # Connecting using restconf to devices
-        print(colored('Connecting to CSR'+str(rtr) + ' and checking BGP....Asking for permission....','blue'))
+        peers.append('Connected to CSR'+str(rtr) + ' checking BGP.. Permission granted')
 
         response = requests.get(url_CSR, auth = (Devices['R'+str(rtr)]['username'],Devices['R'+str(rtr)]['password']),headers=headers,verify=False)#storing the response  of Get operation
         time.sleep(5) # Allowing 5 sec in order to detect any changes
         if response.status_code != 200:# checking the response codes 
-            print('Login request failed. Status code is {}'.format(response.status_code))
+            alert.append('Login request failed. Status code is {}'.format(response.status_code))
         else:        
-            print('Connecting to Router CSR'+str(rtr) + '.....Status code is '+str(response.status_code) + ' OK!')
+            peers.append('Connected to Router CSR'+str(rtr) + ' Rest API Status code is '+str(response.status_code) + ' OK!')
         bgp_data =response.json() # Storing the respinse and display it in a json data format 
         for index in bgp_data['Cisco-IOS-XE-bgp-oper:neighbor']: #checking the peering status 
             CSR7_peers = index['neighbor-id']
@@ -392,13 +399,13 @@ def Monitor_eBGP():
             report = 'Router CSR7 is peering with ' +CSR7_peers + ' and the state is '+ Csr7_state # Checking to see if the peers are UP !! 
                 
             if not 'established' in report: # If not an allert will pop up 
-                alert1 = print(colored('CSR7 ALERT!:','red')+' peer ' +  CSR7_peers + ' is DOWN and the status code is ' + Csr7_state)
-            #alert.append(alert1)
+                alert1 = 'CSR7 ALERT!:'+' peer ' +  CSR7_peers + ' is DOWN and the status code is ' + Csr7_state
+                alert.append(alert1)
             else:
-                peers = print('CSR'+str(rtr) + ' is peering with ' + CSR7_peers + ' for about ' + index['up-time'] + ' h/m/s')
-            #up_peers.append(peers)
-                    
-
+                peer = 'CSR'+str(rtr) + ' is peering with ' + CSR7_peers + ' for about ' + index['up-time'] + ' h/m/s'
+                peers.append(peer)
+           
+    return peers, alert
 #Monitor_eBGP()
 
 def Connectivity_Test():
@@ -406,38 +413,38 @@ def Connectivity_Test():
     print("\n")
 
     device = []
+    err = []
+    err_handl = []
 
-    for i in range  (1,9):
-        targets = "1.1.1." + str(i)
-        try:
-            core = nornir.filter(F(groups__contains="core_group"))
-            results = core.run(netmiko_send_command, command_string="ping " + targets + " source loop0")
-            out = results.keys()
+
+    try: 
+        core_routers = nornir.filter(F(asn=100))
+        for x in range (1,9):
             
-            for key in out:
-                #print(key)
-                response = results[key].result
+            ping = core_routers.run(netmiko_send_command ,command_string='ping 1.1.1.'+str(x), use_textfsm=True)
+            #print_result(ping)
 
-                if not "!!!" in response: 
-                    print(colored("*******************************",'green'))
-                    fail  = key + " cannot ping " + targets 
-                    device.append(fail)
-                    route = nornir.filter(id=Devices[key]['data']['id'])
-                    table = route.run(netmiko_send_command,command_string="show ip route " + str(targets),use_textfsm=True)
-                    for each in table.keys():
-                        ruta = table[each].result
-                        issue = key + ' device report ' + str(ruta)
-                        device.append(issue)
+            for sth in ping.keys():
+                #print(sth)
+                response = ping[sth].result
+                #print(response)
+                if not '!!!' in response:
+                    fail = sth + ' cannot ping ' + '1.1.1.'+str(x)
+                    err.append(fail)
+                    print(fail)
+                else:
+                    print(sth + ' OK ping works!')
 
- 
+    except:
+        NornirExecutionError
+        alert = 'I cannot connect to all devices'
+        err_handl.append(alert)
 
-                  
-        except NornirExecutionError:
-            alrt = 'Alert! I cannot connect to all devices.....'
-            device.append(alrt)
-    if not device:
-        device.append('Connectivity test was succesfull')  
-    return device
+    if len(err)==0 and len(err_handl)==0:
+        device.append('Connectivity test passed!')
+    
+    return device, err, err_handl
+        
     
 
 #Connectivity_Test()

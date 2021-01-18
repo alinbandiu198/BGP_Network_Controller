@@ -24,7 +24,10 @@
         <link rel="stylesheet" href="{{ url_for('static' ,filename='css/index.css') }}">
 
         <title>Network Controller </title>
-        
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
+
+
 
 
     </head>
@@ -32,8 +35,15 @@
     <form action="/action_page.php">
     
 
-        
+
+
+
+
+    
+    
     <body id="body-pd">
+        
+
         
         
         <header class="header" id="header">
@@ -97,7 +107,8 @@
                             <div class="row align-items-center no-gutters">
                                 <div class="col mr-2">
                                     <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span>Automate interface&nbsp; &nbsp;description&nbsp;</span></div>
-                                    <div class="text-dark font-weight-bold h5 mb-0"><button class="btn btn-success" data-bs-hover-animate="rubberBand" type="button">Configure</button></div>
+                                    
+                                    <div class="text-dark font-weight-bold h5 mb-0"><button class="btn btn-success" name="button" onclick="$('#loading').show();"  type="submit" value="Automate_Interface_Description">Configure</button></div>
                                 </div>
                                 <div class="col-auto">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-journal-code" viewBox="0 0 16 16">
@@ -113,7 +124,7 @@
                                 <div class="col mr-2">
                                 
                                     <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span>OSPF State</span></div>
-                                    <div class="text-dark font-weight-bold h5 mb-0"><button class="btn btn-info" name="button" onclick  type="submit" value="Underlay_Monitor">Monitor</button></div>
+                                    <div class="text-dark font-weight-bold h5 mb-0"><button class="btn btn-info" name="button" onclick="$('#loading').show();"  type="submit" value="Underlay_Monitor">Monitor</button></div>
                                 </div>
                                 <div class="col-auto">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-speedometer" viewBox="0 0 16 16">
@@ -132,7 +143,7 @@
                         <div class="row align-items-center no-gutters">
                             <div class="col mr-2">
                                 <div class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>Configure bgp core</span></div>
-                                <div class="text-dark font-weight-bold h5 mb-0"><button class="btn btn-success" data-bs-hover-animate="jello" name ="button" onclick type="submit" value="BGP_Configuration" type="button">Configure</button></div>
+                                <div class="text-dark font-weight-bold h5 mb-0"><button class="btn btn-success"  name ="button" onclick="$('#loading').show();" type="submit" value="BGP_Configuration" type="button">Configure</button></div>
                             </div>
                             <div class="col-auto">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-journal-code" viewBox="0 0 16 16">
@@ -147,7 +158,7 @@
                         <div class="row align-items-center no-gutters">
                             <div class="col mr-2">
                                 <div class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>Monitor iBGP core</span></div>
-                                <div class="text-dark font-weight-bold h5 mb-0"><button class="btn btn-info"  name="button" onclick type="submit" value="Monitor_BGP_Peerings_Core" type="button">Monitor</button></div>
+                                <div class="text-dark font-weight-bold h5 mb-0"><button class="btn btn-info"  name="button" onclick="$('#loading').show();" type="submit" value="Monitor_BGP_Peerings_Core" type="button">Monitor</button></div>
                             </div>
                             <div class="col-auto">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-speedometer" viewBox="0 0 16 16">
@@ -165,7 +176,7 @@
                         <div class="row align-items-center no-gutters">
                             <div class="col mr-2">
                                 <div class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>ebgp status</span></div>
-                                <div class="text-dark font-weight-bold h5 mb-0"><button class="btn btn-info" data-bs-hover-animate="rubberBand" type="button">Monitor</button></div>
+                                <div class="text-dark font-weight-bold h5 mb-0"><button class="btn btn-info" name="button" onclick="$('#loading').show();" type="submit" value="Monitor_eBGP" type="button">Monitor</button></div>
                             </div>
                             <div class="col-auto">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-speedometer" viewBox="0 0 16 16">
@@ -179,7 +190,7 @@
                         <div class="row align-items-center no-gutters">
                             <div class="col mr-2">
                                 <div class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>Connectivity test</span></div>
-                                <div class="text-dark font-weight-bold h5 mb-0"><button class="btn btn-info" name="button" onclick type="submit" value="Connectivity_Test" data-bs-hover-animate="shake" type="button">Test</button></div>
+                                <div class="text-dark font-weight-bold h5 mb-0"><button class="btn btn-info" name="button" onclick="$('#loading').show();" type="submit" value="Connectivity_Test" data-bs-hover-animate="shake" type="button">Test</button></div>
                             </div>
                             <div class="col-auto">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-ui-checks" viewBox="0 0 16 16">
@@ -196,7 +207,7 @@
                         <div class="row align-items-center no-gutters">
                             <div class="col mr-2">
                                 <div class="text-uppercase text-info font-weight-bold text-xs mb-1"><span>AUTO TROUBLESHOOT</span></div>
-                                <div class="row no-gutters align-items-center"><button class="btn btn-info" data-bs-hover-animate="bounce" type="button">Fix Issues</button></div>
+                                <div class="row no-gutters align-items-center"><button class="btn btn-info"  type="button">Fix Issues</button></div>
                             </div>
                             <div class="col-auto">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-bug-fill" viewBox="0 0 16 16">
@@ -213,14 +224,13 @@
         <div class="row">
             <div class="col-lg-7 col-xl-8 bounce animated">
                 <div class="card shadow mb-4"></div>
-              
                 <p>Console Output:</p>
+                <div id="loading" style="display:none; "><img src="/static/images/load.gif" style="width: 500px; height: 500px;" alt="" />{{template_info}}</div>
 
                 {% if template_ok %}
                     {% for each in template_ok %}
-                    
                     <p id="console"> {{each}} 
-                        <img src="/static/images/check.png"  style="width: 20px; height:20px;">    
+                        <img src="/static/images/check.jpeg"  style="width: 20px; height:20px;">    
                     </p>
                     <style>
                         #console{ 
@@ -230,6 +240,7 @@
                         }
 
                     </style>
+
 
                 {% endfor %}
                 {% endif %}
@@ -272,8 +283,7 @@
                 {% endif %}
      
             </div>
-
-
+ 
 
             <div class="col-lg-5 col-xl-4">
                 <div class="card shadow mb-4">
@@ -289,8 +299,8 @@
                 </div><div class="progress-div">
 <div class="progress-title">Network Health</div>
 <div class="progress">
-<div class="progress-bar bar" role="progressbar" style="width: 85%"></div>
-<span style="padding:7px">100%</span>
+<div class="progress-bar bar" role="progressbar" style="width: {{template_err_points}}%"></div>
+<span style="padding:7px">{{ template_err_points}}%</span>
 </div>
 
 
@@ -310,15 +320,14 @@
 </div>
 
 
-        
-
 
 
 
 
         <!--===== MAIN JS =====-->
         <script src="{{ url_for('static',filename='javascript/theme.js') }}"></script>
-
+        
 
     </body>
+    
 </html>

@@ -1,3 +1,19 @@
+function loading(){
+    if(loading==0) {
+      spinner.classList.add('active');
+    } else if(loading==100){
+      clearInterval(id);
+      window.open("welcome.html","_self");
+      spinner.classList.remove('active');
+    } else {
+      loading = loading + 1;
+      if(loading==90){
+        spinner.style.animation ="fadeout 1s ease";
+      }
+    }
+}
+
+
 
 
 
