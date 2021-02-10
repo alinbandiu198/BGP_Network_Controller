@@ -9,12 +9,21 @@ with open ("hosts.yaml", "r") as f:
     Devices = yaml.load(f, Loader=yaml.FullLoader)
 
   
+@app.route('/', methods=['GET','POST'])
+def login():
+    error=None
+    if request.method=='POST':
+        if request.form['username'] != 'admin' or request.form['password']!='admin':
+            error='Invalid Credentials!'
+        else:
+            return redirect(url_for('index'))
+    return render_template('/login.html', error=error)
 
-@app.route('/index.html', methods=['GET', 'POST'])
+    return render_template('/login.html')
+
+@app.route('/dashboard', methods=['GET', 'POST'])
 
 def index():
-    
- 
     if request.method == 'POST':
       
 
@@ -30,11 +39,11 @@ def index():
             return render_template('/index.html' ,template_info=loading_inf, template_ok=output[0], template_err = output[1], template_hand = output[2], template_err_points=err_points)
         
         elif request.form["button"] == "BGP_Configuration":
-
-            output= BGP_Configuration()
             loading_inf ='Loading!  Please wait... '
+            
+            output= BGP_Configuration()
             return render_template('/index.html', template_ok=output[0], template_hand=output[1], template_info=loading_inf)
-
+        
         elif request.form["button"]=="Monitor_BGP_Peerings_Core":
             output=Monitor_BGP_Peerings_Core()
             print(output[1])
@@ -54,10 +63,18 @@ def index():
             return render_template('/index.html', template_ok=output[0], template_err=output[1], template_hand=output[2], template_info=loading_inf)
 
         elif request.form["button"]=="Automate_Interface_Description":
+            
+            
             loading_inf ='Loading!  Please wait... '
             output=Automate_Interface_Description()
-
             return render_template('/index.html', template_ok=output, template_info=loading_inf)
+
+        elif request.form["button"]=="fix_ospf":
+            fix = fix_ospf()
+
+            err_points=100        
+
+            return render_template('/index.html', template_fix_ospf=fix , template_err_points=err_points)
 
     else:
         ok=['Welcome to BGP Network Controller']
@@ -65,11 +82,12 @@ def index():
 
 
 
-@app.route('/table.html',methods=['GET', 'POST'])
+@app.route('/table',methods=['GET', 'POST'])
 def table():
     return render_template('table.html')
 
 
 
+
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=8080,debug=True)
+    app.run(host="10.1.1.4",port=8080,debug=True)

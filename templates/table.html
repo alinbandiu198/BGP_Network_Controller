@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://bootswatch.com/4/minty/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+
+<!-- ===== BOX ICONS ===== -->
+<link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+
+
+
+<!-- ===== CSS ===== -->
+<link rel="stylesheet" href="{{ url_for('static' ,filename='css/index.css') }}">
+
+<title>Network Controller </title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
+
+
+
+
+</head>
+<form action="" method="post"> 
+<form action="/action_page.php">
+
+
+</head>
+<body>
+
+<div class="sidebar">
+    <nav id="sidebar">
+        <div>
+            <a href="#" class="nav__logo">
+                <i class='bx bx-layer nav__logo-icon'></i>
+                <span class="nav__logo-name">Network Controller</span>
+            </a>
+        </div>
+  <a href="dashboard"><i class="fa fa-tachometer"></i>
+    Dashboard</a>
+  <a href="table"><i class="fa fa-fw fa-wrench"></i> Services</a>
+  <a href="#clients"><i class="fa fa-fw fa-user"></i> Clients</a>
+  <a href="#contact"><i class="fa fa-fw fa-envelope"></i> Contact</a>
+</div>
+
+<div class="main">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><h1>BGP Network Controller Topology</h1></li>
+      </ol>
+
+<div class="parent">
+        <img src="{{ url_for('static', filename='images/bgp_topology.png') }}" style="  display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;" /> </a>
+</div>
+
+
+<div id="info-text" class="card text-white bg-info mb-3" style="max-width: 30rem; display:none;">
+    <div class="card-header">Router 1</div>
+    <div class="card-body">
+
+
+        <div class="alert alert-danger">
+            <strong>Success!</strong> Indicates a successful or positive actionereddddddddddddddddddddddddddddd.
+          </div><div class="alert alert-success">
+            <strong>Success!</strong> Indicates a successful or positive action.
+          </div><div class="alert alert-success">
+            <strong>Success!</strong> Indicates a successful or positive action.
+          </div>
+
+
+
+
+        
+    </div>
+</div>
+<SCRIPT>
+    function ShowAndHide() {
+        var x = document.getElementById('info-text');
+        if (x.style.display == 'none') {
+            x.style.display = 'block';
+        } else {
+            x.style.display = 'none';
+        }
+    }
+    </SCRIPT>
+ <img class="img1" onclick="ShowAndHide()" src="/static/images/router.svg">
+
+ <img class="img2" onclick="ShowAndHide()" src="/static/images/router.svg">
+ <style>
+     .img1{
+         position: fixed;
+         top:34.5%;
+         left: 40.6%;
+     }
+     #info-text{
+         position:fixed;
+         top:0%;
+         left: 34%;
+     }
+     .img2{
+         position: fixed;
+         top:54.5%;
+         left: 50.6%;
+     }
+
+ </style>
+
+
+</div>
+    </div>
+</div>
+</body>
+
+    
+
+        <!-- ===== IONICONS ===== -->
+        <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
+        
+
+           <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+
+    <script src="{{ url_for('static',filename='javascript/theme.js') }}"></script>
+</html>
+
