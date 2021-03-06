@@ -2,6 +2,9 @@ from flask import Flask , render_template , redirect, url_for,request ,render_te
 from main_script import *
 import sys
 import yaml
+import os 
+import threading
+import time
 
 app=Flask(__name__ )
 app.static_folder = 'static'
@@ -24,6 +27,7 @@ def login():
 @app.route('/dashboard', methods=['GET', 'POST'])
 
 def index():
+    
     if request.method == 'POST':
       
 
@@ -46,7 +50,9 @@ def index():
         
         elif request.form["button"]=="Monitor_BGP_Peerings_Core":
             output=Monitor_BGP_Peerings_Core()
+            print(output[0])
             print(output[1])
+            print(output[2])
             loading_inf ='Loading!  Please wait... '
             return render_template('/index.html', template_ok=output[0], template_err=output[1], template_hand=output[2], template_info=loading_inf)
         
@@ -84,10 +90,36 @@ def index():
 
 @app.route('/table',methods=['GET', 'POST'])
 def table():
-    return render_template('table.html')
+    
+    #ospf_info = Underlay_Monitor()
+    off_routers = []
+    on_routers= []
+    for ip in range(1,9):
+        target = '1.1.1.'+str(ip)
+        response =os.system("fping -c 1 "+ target+ "> /dev/null")
+        #print(response)
+        if response != 0: 
+            router = 'R'+str(ip) 
+            
+            off_routers.append(router)
+        else:
+            router = 'R'+str(ip) 
+            on_routers.append(router)
+    
+    ospf = Underlay_Monitor()
+
+
+
+    
+    return render_template('/table.html', template_off_router=off_routers , template_on_router=on_routers,
+                                          template_ospf_ok=ospf[4], template_ospf_error=ospf[3])
+
 
 
 
 
 if __name__ == '__main__':
     app.run(host="10.1.1.4",port=8080,debug=True)
+
+
+

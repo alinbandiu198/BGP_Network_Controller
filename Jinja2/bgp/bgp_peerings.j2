@@ -1,9 +1,9 @@
-
 router bgp {{host['asn']}}
 {% for peer in host.peers %}
     neighbor {{ peer }} remote-as 100 
     neighbor {{ peer }} update-source  loop0
 {% endfor %}
+
 
 {% if host.role=="customer" -%}
     router bgp {{host['asn']}}
@@ -28,3 +28,6 @@ router bgp {{host['asn']}}
     neighbor {{ host.peers[1] }} route-reflector-client
 
 {% endif -%}
+
+
+

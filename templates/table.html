@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="5" >
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="https://bootswatch.com/4/minty/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
@@ -32,86 +33,404 @@
 
 
 </head>
-<body>
+<body id="body-pd">
+    <div class="l-navbar" id="navbar">
+        <nav class="nav">
+            <div>
+                <div class="nav__brand">
+                    <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
+                    <a href="#" class="nav__logo">NetworkController</a>
+                </div>
+                <div class="nav__list">
+                    <a href="dashboard" class="nav__link active">
+                        <ion-icon name="rocket-outline"  class="nav__icon" ></ion-icon>
+                        <span class="nav__name">Dashboard</span>
+                    </a>
+                    <a href="table" class="nav__link">
+                        <ion-icon name="server-outline"  class="nav__icon" ></ion-icon>                        
+                        <span class="nav__name">Topology</span>
+                    </a>
 
-<div class="sidebar">
-    <nav id="sidebar">
-        <div>
-            <a href="#" class="nav__logo">
-                <i class='bx bx-layer nav__logo-icon'></i>
-                <span class="nav__logo-name">Network Controller</span>
+                    <div  class="nav__link collapse">
+                        <ion-icon name="folder-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Projects</span>
+
+                        <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
+
+                        <ul class="collapse__menu">
+                            <a href="#" class="collapse__sublink">Data</a>
+                            <a href="#" class="collapse__sublink">Group</a>
+                            <a href="#" class="collapse__sublink">Members</a>
+                        </ul>
+                    </div>
+
+                    <a href="https://github.com/alinbandiu198/BGP_Network_Controller.git" class="nav__link">
+                        <ion-icon name="logo-python" class="nav__icon"></ion-icon>                        
+                        <span class="nav__name">Source Code</span>
+                    </a>
+                    <div class="nav__link collapse">
+                        <ion-icon name="people-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Team</span>
+
+                        <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
+
+                        <ul class="collapse__menu">
+                            <a href="#" class="collapse__sublink">Data</a>
+                            <a href="#" class="collapse__sublink">Group</a>
+                            <a href="#" class="collapse__sublink">Members</a>
+                        </ul>
+                    </div>
+                   
+                </div>
+            </div>
+
+            <a href="#" class="nav__link">
+                <ion-icon name="log-out-outline" class="nav__icon"></ion-icon>
+                <span class="nav__name">Log Out</span>
             </a>
-        </div>
-  <a href="dashboard"><i class="fa fa-tachometer"></i>
-    Dashboard</a>
-  <a href="table"><i class="fa fa-fw fa-wrench"></i> Services</a>
-  <a href="#clients"><i class="fa fa-fw fa-user"></i> Clients</a>
-  <a href="#contact"><i class="fa fa-fw fa-envelope"></i> Contact</a>
-</div>
+        </nav>
+    </div>
+
+
+
+    <!-- ===== IONICONS ===== -->
+    <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+
 
 <div class="main">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><h1>BGP Network Controller Topology</h1></li>
       </ol>
+  
 
-<div class="parent">
-        <img src="{{ url_for('static', filename='images/bgp_topology.png') }}" style="  display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 100%;" /> </a>
-</div>
+     <h1>List of network devices </h1>
+
+<table class="content-table">
+    <thead>
+      <tr>
+        <th>Device</th>
+        <th>Type</th>
+        <th>Vendor</th>
+        <th>Ip Address </th>
+        <th>BGP AS</th>
+        <th>Location</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>OSPF</th>
+        <th>iBGP</th>
+        <th>eBGP</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+       
+        <td > Router1 <img src="/static/images/router.svg"  style="width: 30px; height:30px;"> </td>
+        <td>Ios</td>
+        <td>Cisco</td>
+        <td>1.1.1.1</td>
+        <td>100</td>
+        <td>Service Provider </td>
+        <td>eBGP Router PE </td>
+        {% for each in template_off_router %}
+        {% if each=='R1'%}
+        <td style="color:red;">  Device is OFF!! <img src="/static/images/critical.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% endfor %}
+        {% for each in template_on_router %}
+        {% if each=='R1'%}
+        <td style="color: green;"> Device is ON <img src="/static/images/check.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% endfor %}
+
+        {% if 'R1' in template_ospf_ok %}
+        <td style="color: green;"> Great! <img src="/static/images/check.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% if 'R1' in template_ospf_error %}
+        <td style="color:red;"> Verify OSPF! <img src="/static/images/critical.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
 
 
-<div id="info-text" class="card text-white bg-info mb-3" style="max-width: 30rem; display:none;">
-    <div class="card-header">Router 1</div>
-    <div class="card-body">
-
-
-        <div class="alert alert-danger">
-            <strong>Success!</strong> Indicates a successful or positive actionereddddddddddddddddddddddddddddd.
-          </div><div class="alert alert-success">
-            <strong>Success!</strong> Indicates a successful or positive action.
-          </div><div class="alert alert-success">
-            <strong>Success!</strong> Indicates a successful or positive action.
-          </div>
 
 
 
 
         
-    </div>
+
+
+      </tr>
+      <tr>
+      <td > Router2  <img src="/static/images/router.svg"  style="width: 30px; height:30px;"> </td>
+      <td>Ios</td>
+        <td>Cisco</td>
+        <td>1.1.1.2</td>
+        <td>100</td>
+        <td>Service Provider </td>
+        <td>Provider Router </td>
+        {% for each in template_off_router %}
+        {% if each=='R2'%}
+        <td style="color:red;">  Device is OFF!! <img src="/static/images/critical.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% endfor %}
+        {% for each in template_on_router %}
+        {% if each=='R2'%}
+        <td style="color: green;"> Device is ON <img src="/static/images/check.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% endfor %}
+
+        {% if 'R2' in template_ospf_ok %}
+        <td style="color: green;"> Great! <img src="/static/images/check.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% if 'R2' in template_ospf_error %}
+        <td style="color:red;"> Verify OSPF! <img src="/static/images/critical.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+
+
+
+
+
+      </tr>
+      <tr>
+        <td > Router3  <img src="/static/images/router.svg"  style="width: 30px; height:30px;"> </td>
+        <td>Ios</td>
+        <td>Cisco</td>
+        <td>1.1.1.3</td>
+        <td>100</td>
+        <td>Service Provider </td>
+        <td>Provider Router</td>
+        {% for each in template_off_router %}
+        {% if each=='R3'%}
+        <td style="color:red;">  Device is OFF!! <img src="/static/images/critical.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% endfor %}
+        {% for each in template_on_router %}
+        {% if each=='R3'%}
+        <td style="color: green;"> Device is ON <img src="/static/images/check.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% endfor %}
+
+             
+        {% if 'R3' in template_ospf_ok %}
+        <td style="color: green;"> Great! <img src="/static/images/check.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% if 'R3' in template_ospf_error %}
+        <td style="color:red;"> Verify OSPF! <img src="/static/images/critical.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+
+
+
+      </tr>
+
+      <tr>
+        <td > Router4  <img src="/static/images/router.svg"  style="width: 30px; height:30px;"> </td>
+        <td>Ios</td>
+        <td>Cisco</td>
+        <td>1.1.1.4</td>
+        <td>100</td>
+        <td>Service Provider </td>
+        <td>eBGP Router PE</td>
+        {% for each in template_off_router %}
+        {% if each=='R4'%}
+        <td style="color:red;">  Device is OFF!! <img src="/static/images/critical.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% endfor %}
+        {% for each in template_on_router %}
+        {% if each=='R4'%}
+        <td style="color: green;"> Device is ON <img src="/static/images/check.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% endfor %}
+
+     
+        {% if 'R4' in template_ospf_ok %}
+        <td style="color: green;"> Great! <img src="/static/images/check.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% if 'R4' in template_ospf_error %}
+        <td style="color:red;"> Verify OSPF! <img src="/static/images/critical.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+
+
+
+      </tr>
+      <tr>
+        <td > Router5  <img src="/static/images/router.svg"  style="width: 30px; height:30px;"> </td>
+        <td>Ios-XE</td>
+        <td>Cisco</td>
+        <td>1.1.1.5</td>
+        <td>100</td>
+        <td>Service Provider </td>
+        <td>Router Reflector</td>
+        {% for each in template_off_router %}
+        {% if each=='R5'%}
+        <td style="color:red;">  Device is OFF!! <img src="/static/images/critical.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% endfor %}
+        {% for each in template_on_router %}
+        {% if each=='R5'%}
+        <td style="color: green;"> Device is ON <img src="/static/images/check.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% endfor %}
+
+        {% if 'R5' in template_ospf_ok %}
+        <td style="color: green;"> Great! <img src="/static/images/check.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% if 'R5' in template_ospf_error %}
+        <td style="color:red;"> Verify OSPF! <img src="/static/images/critical.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+
+
+
+
+      </tr>
+      <tr>
+        <td > Router6  <img src="/static/images/router.svg"  style="width: 30px; height:30px;"> </td>
+        <td>Ios-XE</td>
+        <td>Cisco</td>
+        <td>1.1.1.6</td>
+        <td>100</td>
+        <td>Service Provider </td>
+        <td>Router Reflector</td>
+        {% for each in template_off_router %}
+        {% if each=='R6'%}
+        <td style="color:red;">  Device is OFF!! <img src="/static/images/critical.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% endfor %}
+        {% for each in template_on_router %}
+        {% if each=='R6'%}
+        <td style="color: green;"> Device is ON <img src="/static/images/check.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% endfor %}
+
+        {% if 'R6' in template_ospf_ok %}
+        <td style="color: green;"> Great! <img src="/static/images/check.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% if 'R6' in template_ospf_error %}
+        <td style="color:red;"> Verify OSPF! <img src="/static/images/critical.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+
+
+
+
+      </tr>
+      <tr>
+        <td > Router7  <img src="/static/images/router.svg"  style="width: 30px; height:30px;"> </td>
+        <td>Ios-XE</td>
+        <td>Cisco</td>
+        <td>1.1.1.7</td>
+        <td>200</td>
+        <td>Customer1  </td>
+        <td>Customer Edge</td>
+        {% for each in template_off_router %}
+        {% if each=='R7'%}
+        <td style="color:red;">  Device is OFF!! <img src="/static/images/critical.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% endfor %}
+
+        {% for each in template_on_router %}
+        {% if each=='R7'%}
+        <td style="color: green;"> Device is ON <img src="/static/images/check.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% endfor %}
+
+        <td> NA </td>
+
+
+      </tr>
+      <tr>
+        <td > Router8  <img src="/static/images/router.svg"  style="width: 30px; height:30px;"> </td>
+        <td>Ios-XE</td>
+        <td>Cisco</td>
+        <td>1.1.1.8</td>
+        <td>300</td>
+        <td>Customer2 </td>
+        <td>Customer Edge </td>
+        {% for each in template_off_router %}
+        {% if each=='R8'%}
+        <td style="color:red;">  Device is OFF!! <img src="/static/images/critical.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% endfor %}
+
+        {% for each in template_on_router %}
+        {% if each=='R8'%}
+        <td style="color: green;"> Device is ON <img src="/static/images/check.png" style="width: 16px; height: 16px;"> </td>
+        {% endif %}
+        {% endfor %}
+
+        <td>NA</td>
+
+      </tr>
+    </tbody>
+  </table>
+
+  <style>
+      * {
+  font-family: sans-serif; /* Change your font family */
+}
+
+.content-table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  min-width: 400px;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.content-table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+  font-weight: bold;
+}
+
+.content-table th,
+.content-table td {
+  padding: 12px 15px;
+}
+
+.content-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.content-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.content-table tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+.content-table tbody tr.active-row {
+  font-weight: bold;
+  color: #009879;
+}
+
+  </style>
+
+<div class="parent">
+        <img src="{{ url_for('static', filename='images/bgp_topology.png') }}" style="  display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 60%;" /> </a>
 </div>
-<SCRIPT>
-    function ShowAndHide() {
-        var x = document.getElementById('info-text');
-        if (x.style.display == 'none') {
-            x.style.display = 'block';
-        } else {
-            x.style.display = 'none';
-        }
-    }
-    </SCRIPT>
+
+
+
  <img class="img1" onclick="ShowAndHide()" src="/static/images/router.svg">
 
- <img class="img2" onclick="ShowAndHide()" src="/static/images/router.svg">
- <style>
-     .img1{
-         position: fixed;
-         top:34.5%;
-         left: 40.6%;
-     }
-     #info-text{
-         position:fixed;
-         top:0%;
-         left: 34%;
-     }
-     .img2{
-         position: fixed;
-         top:54.5%;
-         left: 50.6%;
-     }
 
- </style>
+
 
 
 </div>
@@ -134,5 +453,26 @@
 
 
     <script src="{{ url_for('static',filename='javascript/theme.js') }}"></script>
+    <SCRIPT>
+        function ShowAndHide() {
+            var x = document.getElementById('info-text1');
+            if (x.style.display == 'none') {
+                x.style.display = 'block';
+            } else {
+                x.style.display = 'none';
+            }
+        }
+    
+        function ShowAndHide2() {
+            var x = document.getElementById('info-text2');
+            if (x.style.display == 'none') {
+                x.style.display = 'block';
+            } else {
+                x.style.display = 'none';
+            }
+        }
+        </script>
+        
+    
 </html>
 
