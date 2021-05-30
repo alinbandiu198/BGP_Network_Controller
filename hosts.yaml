@@ -11,6 +11,7 @@ R1:
         - core_group
     data:
         protocol: bgp
+        route: 10.255.1.1
         asn: 100
         id: iou1
         peers:
@@ -20,9 +21,6 @@ R1:
             - 1.1.1.7
         remote-asn: 200
         role: client
-        
-
-
 R2:
     hostname: 1.1.1.2
     platform: 'ios'
@@ -33,6 +31,7 @@ R2:
         - core_group
     data:
         protocol: bgp
+        route: 10.255.2.2
         asn: 100
         id: iou2
         peers:
@@ -50,6 +49,7 @@ R3:
         - core_group
     data:
         protocol: bgp
+        route: 10.255.3.3
         asn: 100
         id: iou3
         peers:
@@ -67,6 +67,7 @@ R4:
         - core_group
     data:
         protocol: bgp
+        route: 10.255.4.4
         asn: 100
         id: iou4
         peers:
@@ -88,6 +89,7 @@ R5:
         - core_group
     data:
         protocol: bgp
+        route: 10.255.5.5
         asn: 100
         id: iou5
         peers:
@@ -108,6 +110,7 @@ R6:
         - core_group
     data:
         protocol: bgp
+        route: 10.255.6.6
         asn: 100
         id: iou6
         peers:
@@ -129,6 +132,7 @@ R7:
         - Customer1
     data:
         protocol: bgp
+        route: 10.255.7.7
         asn: 200
         remote-asn: 100
         id: iou7
@@ -147,6 +151,7 @@ R8:
         - Customer2
     data:
         protocol: bgp
+        route: 10.255.8.8
         id: iou8
         asn: 300
         remote-asn: 100

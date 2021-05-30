@@ -2,9 +2,9 @@
 inventory:
     plugin: SimpleInventory
     options:
-        host_file: "/home/alin/Documents/Network_Automation_v2/hosts.yaml"
-        group_file: "/home/alin/Documents/Network_Automation_v2/groups.yaml"
-        defaults_file: "/home/alin/Documents/Network_Automation_v2/defaults.yaml"
+        host_file: "/home/alinbandiu/Documents/Proiect_Licenta_Bandiu_Alin_442D/hosts.yaml"
+        group_file: "/home/alinbandiu/Documents/Proiect_Licenta_Bandiu_Alin_442D/groups.yaml"
+        defaults_file: "/home/alinbandiu/Documents/Proiect_Licenta_Bandiu_Alin_442D/defaults.yaml"
 
 runner:
   plugin: threaded
